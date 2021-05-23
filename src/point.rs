@@ -1,15 +1,15 @@
+use super::almost_equal;
 use std::hash::{Hash, Hasher};
 
 #[derive(Copy, Clone, Default)]
 pub struct Point {
-    pub id: usize,
     pub x: f64,
     pub y: f64,
 }
 
 impl Point {
-    pub fn new(id: usize, x: f64, y: f64) -> Self {
-        Self { id, x, y }
+    pub fn new(x: f64, y: f64) -> Self {
+        Self { x, y }
     }
 
     pub fn dist(&self, other: &Point) -> f64 {
@@ -23,10 +23,6 @@ impl Point {
     }
 }
 
-fn almost_equal(a: f64, b: f64) -> bool {
-    (a - b).abs() <= f64::EPSILON
-}
-
 impl PartialEq for Point {
     fn eq(&self, other: &Self) -> bool {
         almost_equal(self.x, other.x) && almost_equal(self.y, other.y)
@@ -37,6 +33,7 @@ impl Eq for Point {}
 
 impl Hash for Point {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
+        self.x.to_bits().hash(state);
+        self.y.to_bits().hash(state);
     }
 }

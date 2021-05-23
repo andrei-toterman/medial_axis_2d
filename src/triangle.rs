@@ -19,7 +19,7 @@ impl Triangle {
         let circum_y = (p1n * (p3.x - p2.x) + p2n * (p1.x - p3.x) + p3n * (p2.x - p1.x))
             / (p1.y * (p3.x - p2.x) + p2.y * (p1.x - p3.x) + p3.y * (p2.x - p1.x));
 
-        let circumcenter = Point::new(0, circum_x / 2.0, circum_y / 2.0);
+        let circumcenter = Point::new(circum_x / 2.0, circum_y / 2.0);
         let circumradius = p1.dist(&circumcenter);
 
         Self {
@@ -37,5 +37,12 @@ impl Triangle {
 
     pub fn has_point_circumcircle(&self, point: &Point) -> bool {
         point.dist(&self.circumcenter) <= self.circumradius
+    }
+
+    pub fn centroid(&self) -> Point {
+        Point::new(
+            (self.p1.x + self.p2.x + self.p3.x) / 3.0,
+            (self.p1.y + self.p2.y + self.p3.y) / 3.0,
+        )
     }
 }

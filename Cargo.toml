@@ -5,3 +5,4 @@ authors = ["Andrei Toterman <andrei.toterman@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+raylib = "3.5.0"

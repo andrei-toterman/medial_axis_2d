@@ -22,9 +22,11 @@ impl Eq for Edge {}
 
 impl Hash for Edge {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        let (x1, y1) = (self.p1.x.to_bits(), self.p1.y.to_bits());
-        let (x2, y2) = (self.p2.x.to_bits(), self.p2.y.to_bits());
-        std::cmp::max((x1, y1), (x2, y2)).hash(state);
-        std::cmp::min((x1, y1), (x2, y2)).hash(state);
+        let mut points = [
+            (self.p1.x.to_bits(), self.p1.y.to_bits()),
+            (self.p2.x.to_bits(), self.p2.y.to_bits()),
+        ];
+        points.sort_unstable();
+        points.hash(state);
     }
 }

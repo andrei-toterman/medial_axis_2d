@@ -21,18 +21,18 @@ pub fn delaunay(points: &[Point]) -> Vec<Triangle> {
     } = points[0];
     let (mut max_x, mut max_y) = (min_x, min_y);
 
-    for Point { x, y, .. } in points.iter() {
-        if *x < min_x {
-            min_x = *x;
+    for &Point { x, y } in points.iter() {
+        if x < min_x {
+            min_x = x;
         }
-        if *y < min_y {
-            min_y = *y;
+        if y < min_y {
+            min_y = y;
         }
-        if *x > max_x {
-            max_x = *x;
+        if x > max_x {
+            max_x = x;
         }
-        if *y > max_y {
-            max_y = *y;
+        if y > max_y {
+            max_y = y;
         }
     }
 

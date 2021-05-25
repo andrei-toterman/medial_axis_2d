@@ -11,7 +11,7 @@ pub fn almost_equal(a: f64, b: f64) -> bool {
     (a - b).abs() <= f64::EPSILON
 }
 
-pub fn triangulate(points: &[Point]) -> Vec<Triangle> {
+pub fn delaunay(points: &[Point]) -> Vec<Triangle> {
     let mut triangles = Vec::new();
 
     let Point {

@@ -1,5 +1,5 @@
 use medial_axis_2d::{
-    edge::Edge, medial_axis, point::Point, point_inside_shape, triangle::Triangle, triangulate,
+    delaunay, edge::Edge, medial_axis, point::Point, point_inside_shape, triangle::Triangle,
 };
 use raylib::prelude::{
     rstr, Camera2D, Color, MouseButton, RaylibDraw, RaylibDrawGui, RaylibMode2DExt, Rectangle,
@@ -23,7 +23,7 @@ fn main() {
     }
 
     let start = std::time::Instant::now();
-    let mut triangles = triangulate(&points);
+    let mut triangles = delaunay(&points);
     println!("{}", start.elapsed().as_micros());
 
     triangles.retain(|tri| point_inside_shape(&tri.centroid(), &points));

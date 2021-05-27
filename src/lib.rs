@@ -81,7 +81,10 @@ pub fn delaunay(points: &[Point]) -> Vec<Triangle> {
     triangles
         .into_iter()
         .filter_map(|(tri, _)| {
-            if !tri.has_point(&super_p1) && !tri.has_point(&super_p2) && !tri.has_point(&super_p3) {
+            if [super_p1, super_p2, super_p3]
+                .iter()
+                .all(|p| !tri.has_point(p))
+            {
                 Some(tri)
             } else {
                 None

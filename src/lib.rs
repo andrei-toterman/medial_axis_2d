@@ -4,7 +4,7 @@ pub mod triangle;
 
 use edge::Edge;
 use point::Point;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use triangle::Triangle;
 
 pub fn almost_equal(a: f64, b: f64) -> bool {
@@ -46,36 +46,30 @@ pub fn delaunay(points: &[Point]) -> Vec<Triangle> {
 
     triangles.push((Triangle::new(super_p1, super_p2, super_p3), false));
 
-    let mut polygon = Vec::new();
+    let mut hole = HashSet::new();
     for point in points.iter() {
         for (tri, bad) in triangles.iter_mut() {
             if tri.has_point_circumcircle(point) {
                 *bad = true;
-                polygon.push((Edge::new(tri.p1, tri.p2), false));
-                polygon.push((Edge::new(tri.p2, tri.p3), false));
-                polygon.push((Edge::new(tri.p3, tri.p1), false));
-            }
-        }
-
-        triangles.retain(|(_, bad)| !*bad);
-
-        for i in 0..polygon.len() {
-            let (a, b) = polygon.split_at_mut(i);
-            let (edge_1, bad_1) = &mut b[0];
-            for (edge_2, bad_2) in a {
-                if edge_1 == edge_2 {
-                    *bad_1 = true;
-                    *bad_2 = true;
+                let edges = [
+                    Edge::new(tri.p1, tri.p2),
+                    Edge::new(tri.p2, tri.p3),
+                    Edge::new(tri.p3, tri.p1),
+                ];
+                for &edge in edges.iter() {
+                    if !hole.insert(edge) {
+                        hole.remove(&edge);
+                    }
                 }
             }
         }
 
-        polygon.retain(|(_, bad)| !*bad);
+        triangles.retain(|&(_, bad)| !bad);
 
-        for (edge, _) in polygon.iter() {
+        for edge in hole.iter() {
             triangles.push((Triangle::new(edge.p1, edge.p2, *point), false));
         }
-        polygon.clear();
+        hole.clear();
     }
 
     triangles

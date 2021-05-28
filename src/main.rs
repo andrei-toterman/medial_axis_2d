@@ -11,7 +11,7 @@ fn main() {
     let (mut rl_handle, rl_thread) = raylib::init().size(1000, 1000).title("skeleton 2d").build();
 
     let mut args = std::env::args().skip(1);
-    let input = args.next().unwrap_or_else(|| String::from("points.txt"));
+    let input = args.next().unwrap_or_else(|| String::from("points_2d.txt"));
 
     let mut points = Vec::new();
     let input = BufReader::new(std::fs::File::open(&input).unwrap());
@@ -24,7 +24,7 @@ fn main() {
 
     let start = std::time::Instant::now();
     let mut triangles = delaunay(&points);
-    println!("{}", start.elapsed().as_micros());
+    println!("delaunay took {} microseconds", start.elapsed().as_micros());
 
     triangles.retain(|tri| point_inside_shape(&tri.centroid(), &points));
     let media_axis = medial_axis(&triangles);

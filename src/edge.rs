@@ -1,6 +1,7 @@
 use super::point::Point;
 use std::hash::{Hash, Hasher};
 
+#[derive(Clone, Copy)]
 pub struct Edge {
     pub p1: Point,
     pub p2: Point,

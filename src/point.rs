@@ -1,4 +1,5 @@
 use super::almost_equal;
+use raylib::math::Vector2;
 use std::hash::{Hash, Hasher};
 
 #[derive(Copy, Clone)]
@@ -34,5 +35,17 @@ impl Eq for Point {}
 impl Hash for Point {
     fn hash<H: Hasher>(&self, state: &mut H) {
         (self.x.to_bits(), self.y.to_bits()).hash(state);
+    }
+}
+
+impl From<Point> for Vector2 {
+    fn from(Point { x, y }: Point) -> Self {
+        Self::new(x as f32, y as f32)
+    }
+}
+
+impl From<Vector2> for Point {
+    fn from(Vector2 { x, y }: Vector2) -> Self {
+        Self::new(x as f64, y as f64)
     }
 }

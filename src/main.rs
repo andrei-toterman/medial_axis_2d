@@ -1,4 +1,4 @@
-use medial_axis_2d::{delaunay, medial_axis, point::Point, point_inside_shape, triangle::Triangle};
+use medial_axis_2d::{delaunay, medial_axis, point::Point, point_inside_shape};
 use raylib::prelude::{
     get_random_value, rstr, Camera2D, Color, KeyboardKey, MouseButton, RaylibDraw, RaylibDrawGui,
     RaylibMode2DExt, Rectangle, Vector2,
@@ -28,19 +28,16 @@ fn main() {
     triangles.retain(|tri| point_inside_shape(&tri.centroid(), &points));
     let media_axis = medial_axis(&triangles);
 
-    let mut outline_draw = points
-        .iter()
-        .map(|p| Vector2::new(p.x as f32, p.y as f32))
-        .collect::<Vec<_>>();
+    let mut outline_draw = points.iter().map(|&p| Vector2::from(p)).collect::<Vec<_>>();
     outline_draw.push(outline_draw[0]);
 
     let triangles_draw = triangles
         .iter()
-        .map(|Triangle { p1, p2, p3, .. }| {
+        .map(|tri| {
             (
-                Vector2::new(p1.x as f32, p1.y as f32),
-                Vector2::new(p2.x as f32, p2.y as f32),
-                Vector2::new(p3.x as f32, p3.y as f32),
+                Vector2::from(tri.p1),
+                Vector2::from(tri.p2),
+                Vector2::from(tri.p3),
                 Color::color_from_hsv(get_random_value::<i32>(0, 360) as f32, 0.5, 0.8),
             )
         })

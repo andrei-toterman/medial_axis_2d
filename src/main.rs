@@ -66,6 +66,7 @@ fn main() {
 
     let mut show_delaunay = false;
     let mut show_skeleton = false;
+    let mut show_skeleton_balls = false;
     let mut show_outline = true;
     let mut show_vertices = true;
     let mut show_circles = false;
@@ -115,8 +116,10 @@ fn main() {
             if show_skeleton {
                 for &(v1, v2) in medial_axis_draw.iter() {
                     draw_handle.draw_line_ex(v1, v2, 3.0, Color::PURPLE);
-                    draw_handle.draw_circle_v(v1, 5.0, Color::PURPLE);
-                    draw_handle.draw_circle_v(v2, 5.0, Color::PURPLE);
+                    if show_skeleton_balls {
+                        draw_handle.draw_circle_v(v1, 5.0, Color::PURPLE);
+                        draw_handle.draw_circle_v(v2, 5.0, Color::PURPLE);
+                    }
                 }
             }
 
@@ -185,6 +188,11 @@ fn main() {
                 Rectangle::new(10.0, gui_y.next().unwrap(), 30.0, 30.0),
                 Some(rstr!("show skeleton")),
                 show_skeleton,
+            );
+            show_skeleton_balls = draw_handle.gui_check_box(
+                Rectangle::new(10.0, gui_y.next().unwrap(), 30.0, 30.0),
+                Some(rstr!("show skeleton balls")),
+                show_skeleton_balls,
             );
             show_circles = draw_handle.gui_check_box(
                 Rectangle::new(10.0, gui_y.next().unwrap(), 30.0, 30.0),
